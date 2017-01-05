@@ -1,0 +1,19 @@
+{
+  "name": "custom-youtube",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack -w --config webpack.config.js",
+    "build-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js"
+  },
+  "author": "Lykov Artem",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^3.5.0"
+  },
+  "devDependencies": {
+    "cross-env": "^3.1.3",
+    "webpack": "^1.14.0"
+  }
+}

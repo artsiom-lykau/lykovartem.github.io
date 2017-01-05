@@ -15,15 +15,18 @@ function search() {
 
     function callback(e) {
         if (e.keyCode ? e.keyCode == 13 : true) {
+
             let videoList = document.getElementById('video-list');
             let query = document.getElementById('search').value;
+            let pagesList = document.getElementById('pages-list');
+
             videoList.innerHTML = '';
             vars.query = query;
             request(query).then(videoList => resize(videoList));
             window.onresize = () => resize(videoList.childNodes);
             window.onload = swipeHandler();
             videoList.style.left = `0px`;
-            document.getElementById('pages-list').innerHTML = '';
+            pagesList.innerHTML = '';
         }
     }
 }

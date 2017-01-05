@@ -50,11 +50,7 @@
 
 
 	const layoutRender = __webpack_require__(1);
-	// const swipeHandler = require('./scripts/swipeHandler');
-	// const resize = require('./scripts/resize');
 	const search = __webpack_require__(2);
-	// const vars = require('./scripts/vars');
-
 
 	layoutRender();
 	search();
@@ -120,15 +116,18 @@
 
 	    function callback(e) {
 	        if (e.keyCode ? e.keyCode == 13 : true) {
+
 	            let videoList = document.getElementById('video-list');
 	            let query = document.getElementById('search').value;
+	            let pagesList = document.getElementById('pages-list');
+
 	            videoList.innerHTML = '';
 	            vars.query = query;
 	            request(query).then(videoList => resize(videoList));
 	            window.onresize = () => resize(videoList.childNodes);
 	            window.onload = swipeHandler();
 	            videoList.style.left = `0px`;
-	            document.getElementById('pages-list').innerHTML = '';
+	            pagesList.innerHTML = '';
 	        }
 	    }
 	}
@@ -297,10 +296,13 @@
 
 	    Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
 
+	    /*for (let i = vars.pageNumber - 3 > 0 ? vars.pageNumber - 3 : 1; i <= vars.pageNumber + 3; i++) {
+	     console.log(i);
+	     }*/
+
 	    pagesList.onclick = function (e) {
 	        if (e.target.nodeName == 'LI') {
-	            let targetPage = e.target;
-	            changePage(targetPage);
+	            changePage(e.target);
 	        }
 	    };
 	}
@@ -323,18 +325,6 @@
 	    });
 	    Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
 
-
-	    for (let i = vars.pageNumber - 2 > 0 ? vars.pageNumber - 2 : 1; i <= vars.pageNumber + 2; i++) {
-	        // console.log(i);
-	        /*pagesList.innerHTML = '';
-	        let page = document.createElement('li');
-	        page.setAttribute('data-page', `${i}`);
-	        page.innerHTML = `${i}`;
-	        pagesList.appendChild(page);*/
-	    }
-	    console.log('***')
-
-
 	    if (videoUl.childElementCount - pageNumber * vars.videoPerPage < vars.videoPerPage) {
 	        console.log('request');
 	        request(vars.query, vars.token)
@@ -342,16 +332,16 @@
 	                let pagesCount = Math.round(videoUl.childElementCount / vars.videoPerPage);
 	                pagesList.innerHTML = '';
 
+
 	                for (let i = 0; i < pagesCount; i++) {
 	                    let page = document.createElement('li');
 	                    page.setAttribute('data-page', `${i + 1}`);
 	                    page.innerHTML = `${i + 1}`;
 	                    pagesList.appendChild(page);
 	                }
-
 	                console.log('pN = ' + vars.pageNumber);
-
 	                Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
+
 	            })
 	    }
 	}
@@ -370,7 +360,7 @@
 	 */
 
 	const vars = __webpack_require__(5);
-	const request = __webpack_require__(3);
+	// const request = require('./request');
 	const pagination = __webpack_require__(7);
 
 
@@ -379,10 +369,10 @@
 	    document.ontouchmove = handleMove;
 
 
-	   /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
-	    document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
-	    document.removeEventListener('touchmove', handleMove)
-	    document.addEventListener('touchmove', handleMove, false)*/
+	    /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
+	     document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
+	     document.removeEventListener('touchmove', handleMove)
+	     document.addEventListener('touchmove', handleMove, false)*/
 
 
 	    document.getElementById('video-board').onmousedown = handleStart;
@@ -392,16 +382,14 @@
 	    let yDown;
 
 	    function handleStart(e) {
-	        e.preventDefault()
-	        console.log('handleStart')
+	        e.preventDefault();
+
 	        xDown = e.clientX || e.touches[0].clientX;
 	        yDown = e.clientY || e.touches[0].clientY;
-	        // console.log(xDown, yDown)
 	    }
 
 	    function handleMove(e) {
 	        e.preventDefault();
-	        // console.log('handleMove')
 
 	        if (!xDown) {
 	            return;
@@ -418,17 +406,18 @@
 	        let prevPage = -(leftOffset / vars.videoBoardWidth) + 1;
 	        let pagesList = document.getElementById('pages-list').childNodes;
 
+
 	        if (Math.abs(xDiff) > Math.abs(yDiff)) {
 	            if (xDiff > 0) {
-	                console.log('prevPage = ' + prevPage);
+	                // console.log('prevPage = ' + prevPage);
 	                pagination.changePage(pagesList[prevPage]);
-
 	            }
 	            else if (xDiff < 0 && leftOffset != 0) {
-	                console.log('prevPage = ' + prevPage);
+	                // console.log('prevPage = ' + prevPage);
 	                pagination.changePage(pagesList[prevPage - 2]);
 	            }
 	        }
+	        Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
 	        xDown = 0;
 	    }
 	}

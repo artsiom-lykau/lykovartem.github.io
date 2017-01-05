@@ -29,10 +29,13 @@ function pagination(videoList) {
 
     Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
 
+    /*for (let i = vars.pageNumber - 3 > 0 ? vars.pageNumber - 3 : 1; i <= vars.pageNumber + 3; i++) {
+     console.log(i);
+     }*/
+
     pagesList.onclick = function (e) {
         if (e.target.nodeName == 'LI') {
-            let targetPage = e.target;
-            changePage(targetPage);
+            changePage(e.target);
         }
     };
 }
@@ -55,18 +58,6 @@ function changePage(prevPage) {
     });
     Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
 
-
-    for (let i = vars.pageNumber - 2 > 0 ? vars.pageNumber - 2 : 1; i <= vars.pageNumber + 2; i++) {
-        // console.log(i);
-        /*pagesList.innerHTML = '';
-        let page = document.createElement('li');
-        page.setAttribute('data-page', `${i}`);
-        page.innerHTML = `${i}`;
-        pagesList.appendChild(page);*/
-    }
-    console.log('***')
-
-
     if (videoUl.childElementCount - pageNumber * vars.videoPerPage < vars.videoPerPage) {
         console.log('request');
         request(vars.query, vars.token)
@@ -74,16 +65,16 @@ function changePage(prevPage) {
                 let pagesCount = Math.round(videoUl.childElementCount / vars.videoPerPage);
                 pagesList.innerHTML = '';
 
+
                 for (let i = 0; i < pagesCount; i++) {
                     let page = document.createElement('li');
                     page.setAttribute('data-page', `${i + 1}`);
                     page.innerHTML = `${i + 1}`;
                     pagesList.appendChild(page);
                 }
-
                 console.log('pN = ' + vars.pageNumber);
-
                 Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
+
             })
     }
 }

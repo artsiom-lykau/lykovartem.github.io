@@ -3,7 +3,7 @@
  */
 
 const vars = require('./vars');
-const request = require('./request');
+// const request = require('./request');
 const pagination = require('./pagination');
 
 
@@ -12,10 +12,10 @@ function swipeHandler() {
     document.ontouchmove = handleMove;
 
 
-   /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
-    document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
-    document.removeEventListener('touchmove', handleMove)
-    document.addEventListener('touchmove', handleMove, false)*/
+    /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
+     document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
+     document.removeEventListener('touchmove', handleMove)
+     document.addEventListener('touchmove', handleMove, false)*/
 
 
     document.getElementById('video-board').onmousedown = handleStart;
@@ -25,16 +25,14 @@ function swipeHandler() {
     let yDown;
 
     function handleStart(e) {
-        e.preventDefault()
-        console.log('handleStart')
+        e.preventDefault();
+
         xDown = e.clientX || e.touches[0].clientX;
         yDown = e.clientY || e.touches[0].clientY;
-        // console.log(xDown, yDown)
     }
 
     function handleMove(e) {
         e.preventDefault();
-        // console.log('handleMove')
 
         if (!xDown) {
             return;
@@ -51,17 +49,18 @@ function swipeHandler() {
         let prevPage = -(leftOffset / vars.videoBoardWidth) + 1;
         let pagesList = document.getElementById('pages-list').childNodes;
 
+
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
             if (xDiff > 0) {
-                console.log('prevPage = ' + prevPage);
+                // console.log('prevPage = ' + prevPage);
                 pagination.changePage(pagesList[prevPage]);
-
             }
             else if (xDiff < 0 && leftOffset != 0) {
-                console.log('prevPage = ' + prevPage);
+                // console.log('prevPage = ' + prevPage);
                 pagination.changePage(pagesList[prevPage - 2]);
             }
         }
+        Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
         xDown = 0;
     }
 }

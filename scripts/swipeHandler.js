@@ -16,14 +16,14 @@ function swipeHandler() {
     let yDown;
 
     function handleStart(e) {
-        e.preventDefault();
+        // e.preventDefault();
 
         xDown = e.clientX || e.touches[0].clientX;
         yDown = e.clientY || e.touches[0].clientY;
     }
 
     function handleMove(e) {
-        e.preventDefault();
+        // e.preventDefault();
 
         if (!xDown) {
             return;
@@ -49,7 +49,7 @@ function swipeHandler() {
                 pagination.changePage(pagesList[prevPage - 2]);
             }
         }
-        Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
+        // Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
         xDown = 0;
     }
 }

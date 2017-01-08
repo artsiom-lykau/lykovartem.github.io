@@ -2,6 +2,8 @@
  * Created by lykovartem on 31.12.2016.
  */
 
+const vars = require('./vars');
+
 function renderLayout() {
     let wrapper = document.createElement('div');
     wrapper.setAttribute('class', 'wrapper');
@@ -10,8 +12,8 @@ function renderLayout() {
     let searchContainer = document.createElement('div');
     searchContainer.setAttribute('class', 'search-container');
     searchContainer.innerHTML =
-        '<label><input id="search" placeholder="type query..." value="javascript" type="search"/>' +
-        '<button id="search-button">Search</button></label>';
+        '<label><input id="search" placeholder="Enter a query..." value="" type="search"/>' +
+        '<button id="search-button"><i class="fa fa-search" aria-hidden="true"></i></button></label>';
     wrapper.appendChild(searchContainer);
 
     let videoBoard = document.createElement('div');
@@ -30,4 +32,13 @@ function renderLayout() {
     wrapper.appendChild(pages);
 }
 
-module.exports = renderLayout;
+function setVideoListWidth() {
+    let videoList = document.getElementById('video-list');
+    videoList.style.width = `${2 * videoList.childElementCount * vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS}px`;
+    return videoList.childNodes;
+}
+
+module.exports = {
+    renderLayout,
+    setVideoListWidth
+};

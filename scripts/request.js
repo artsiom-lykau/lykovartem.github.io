@@ -4,6 +4,7 @@
 
 const slideRender = require('./slideRender');
 const vars = require('./vars');
+const layoutRender = require('./layoutRender');
 
 
 function request(query, pageToken) {
@@ -24,9 +25,9 @@ function request(query, pageToken) {
                             href: `https://www.youtube.com/watch?v=${item.id}`,
                             title: item.snippet.title,
                             autor: item.snippet.channelTitle,
-                            descr: item.snippet.description.substr(0, 140),
+                            descr: item.snippet.description,
                             img: item.snippet.thumbnails.medium.url,
-                            date: item.snippet.publishedAt.toString(),
+                            date: `${item.snippet.publishedAt.slice(0, 10)}, ${item.snippet.publishedAt.slice(11, 19)}`,
                             views: item.statistics.viewCount,
                             hrefChannel: `https://www.youtube.com/channel/${item.snippet.channelId}`,
                             likeCount: item.statistics.likeCount,
@@ -41,9 +42,7 @@ function request(query, pageToken) {
             infoArray.forEach(item => {
                 slideRender(item)
             });
-            let videoList = document.getElementById('video-list');
-            videoList.style.width = `${2 * videoList.childElementCount * 330}px`;
-            return videoList.childNodes;
+            return layoutRender.setVideoListWidth();
         })
         .then(videoList => {
             return videoList;

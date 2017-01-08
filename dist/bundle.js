@@ -50,19 +50,21 @@
 
 
 	const layoutRender = __webpack_require__(1);
-	const search = __webpack_require__(2);
+	const search = __webpack_require__(3);
 
-	layoutRender();
+	layoutRender.renderLayout();
 	search();
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by lykovartem on 31.12.2016.
 	 */
+
+	const vars = __webpack_require__(2);
 
 	function renderLayout() {
 	    let wrapper = document.createElement('div');
@@ -72,8 +74,8 @@
 	    let searchContainer = document.createElement('div');
 	    searchContainer.setAttribute('class', 'search-container');
 	    searchContainer.innerHTML =
-	        '<label><input id="search" placeholder="type query..." value="javascript" type="search"/>' +
-	        '<button id="search-button">Search</button></label>';
+	        '<label><input id="search" placeholder="Enter a query..." value="" type="search"/>' +
+	        '<button id="search-button"><i class="fa fa-search" aria-hidden="true"></i></button></label>';
 	    wrapper.appendChild(searchContainer);
 
 	    let videoBoard = document.createElement('div');
@@ -92,20 +94,46 @@
 	    wrapper.appendChild(pages);
 	}
 
-	module.exports = renderLayout;
+	function setVideoListWidth() {
+	    let videoList = document.getElementById('video-list');
+	    videoList.style.width = `${2 * videoList.childElementCount * vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS}px`;
+	    return videoList.childNodes;
+	}
+
+	module.exports = {
+	    renderLayout,
+	    setVideoListWidth
+	};
 
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by lykovartem on 02.01.2017.
+	 */
+
+	let vars = {
+	    VIDEO_ELEMENT_WIDTH_WITH_MARGINS: 330,
+	    ACTIVE_PAGE_COLOR: '#DB5461',
+	    DEFAULT_PAGE_COLOR: '#393D3F',
+	};
+
+	module.exports = vars;
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by lykovartem on 03.01.2017.
 	 */
 
-	const request = __webpack_require__(3);
+	const request = __webpack_require__(4);
 	const resize = __webpack_require__(6);
-	const vars = __webpack_require__(5);
+	const vars = __webpack_require__(2);
 	const pagination = __webpack_require__(7);
 	const swipeHandler = __webpack_require__(8);
 
@@ -136,15 +164,16 @@
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by lykovartem on 31.12.2016.
 	 */
 
-	const slideRender = __webpack_require__(4);
-	const vars = __webpack_require__(5);
+	const slideRender = __webpack_require__(5);
+	const vars = __webpack_require__(2);
+	const layoutRender = __webpack_require__(1);
 
 
 	function request(query, pageToken) {
@@ -165,9 +194,9 @@
 	                            href: `https://www.youtube.com/watch?v=${item.id}`,
 	                            title: item.snippet.title,
 	                            autor: item.snippet.channelTitle,
-	                            descr: item.snippet.description.substr(0, 140),
+	                            descr: item.snippet.description,
 	                            img: item.snippet.thumbnails.medium.url,
-	                            date: item.snippet.publishedAt.toString(),
+	                            date: `${item.snippet.publishedAt.slice(0, 10)}, ${item.snippet.publishedAt.slice(11, 19)}`,
 	                            views: item.statistics.viewCount,
 	                            hrefChannel: `https://www.youtube.com/channel/${item.snippet.channelId}`,
 	                            likeCount: item.statistics.likeCount,
@@ -182,9 +211,7 @@
 	            infoArray.forEach(item => {
 	                slideRender(item)
 	            });
-	            let videoList = document.getElementById('video-list');
-	            videoList.style.width = `${2 * videoList.childElementCount * 330}px`;
-	            return videoList.childNodes;
+	            return layoutRender.setVideoListWidth();
 	        })
 	        .then(videoList => {
 	            return videoList;
@@ -195,7 +222,7 @@
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	/**
@@ -210,30 +237,19 @@
 	        `<a href="${item.href}"><img src="${item.img}" alt="${item.title}"></a>
 	                             <h4 class="title"><a href="${item.href}">${item.title}</a></h4>
 	                             <p class="description">${item.descr}</p>
-	                             <h5><a href="${item.hrefChannel}">${item.autor}</a></h5>
-	                             <p>${item.date}</p>
-	                             <p class="views">Views: ${item.views}</p>
-	                             <p class="likes">likes: ${item.likeCount}</p>
-	                             <p class="dislikes">dislikes: ${item.dislikeCount}</p>`;
+	                             <h5><a href="${item.hrefChannel}">
+	                                <i class="fa fa-user" aria-hidden="true"></i> ${item.autor}</a>
+	                             </h5>
+	                             <p><i class="fa fa-calendar" aria-hidden="true"></i> ${item.date}</p>
+	                             <p class="views"><i class="fa fa-eye" aria-hidden="true"></i> ${item.views}</p>
+	                             <p class="likes"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> ${item.likeCount}</p>
+	                             <p class="dislikes"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> ${item.dislikeCount}</p>`;
 	    videoList.appendChild(element);
 	    element.setAttribute('data-el', `${videoList.childElementCount}`);
 
 	}
 
 	module.exports = render;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	/**
-	 * Created by lykovartem on 02.01.2017.
-	 */
-
-	let vars = {};
-
-	module.exports = vars;
 
 
 /***/ },
@@ -244,12 +260,12 @@
 	 * Created by lykovartem on 03.01.2017.
 	 */
 
-	const vars = __webpack_require__(5);
+	const vars = __webpack_require__(2);
 	const pagination = __webpack_require__(7);
 
 	function resize(videoList) {
-	    let videoPerPage = Math.floor(window.outerWidth / 330) || 1;
-	    let videoBoardWidth = videoPerPage * 330;
+	    let videoPerPage = Math.floor(window.outerWidth / vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS) || 1;
+	    let videoBoardWidth = videoPerPage * vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS;
 	    let videoBoard = document.getElementById('video-board');
 
 	    videoBoard.style.width = `${videoBoardWidth}px`;
@@ -269,38 +285,40 @@
 	 * Created by lykovartem on 03.01.2017.
 	 */
 
-	const vars = __webpack_require__(5);
+	const vars = __webpack_require__(2);
 	const resize = __webpack_require__(6);
-	const request = __webpack_require__(3);
+	const request = __webpack_require__(4);
 
-	function pagination(videoList) {
-
-	    let pagesList = document.getElementById('pages-list');
-	    let videoUl = document.getElementById('video-list');
-	    let pagesCount = Math.round(videoUl.childElementCount / vars.videoPerPage);
-	    pagesList.innerHTML = '';
+	function renderPages() {
+	    let pagesCount = Math.round(vars.videoUl.childElementCount / vars.videoPerPage);
 
 	    for (let i = 0; i < pagesCount; i++) {
 	        let page = document.createElement('li');
 	        page.setAttribute('data-page', `${i + 1}`);
 	        page.innerHTML = `${i + 1}`;
-	        pagesList.appendChild(page);
+	        vars.pagesList.appendChild(page);
 	    }
+	    Array.from(vars.pagesList.childNodes)[vars.pageNumber - 1].style.color = vars.ACTIVE_PAGE_COLOR;
+	}
 
-	    let pageNumber = Math.floor(-(parseInt(videoUl.style.left, 10) / vars.videoBoardWidth) + 1);
+	function pagination(videoList) {
+
+	    let pagesList = document.getElementById('pages-list');
+	    let videoUl = document.getElementById('video-list');
+	    vars.pagesList = pagesList;
+	    vars.videoUl = videoUl;
+	    vars.pagesList.innerHTML = '';
+
+	    let pageNumber = Math.floor(-(parseInt(vars.videoUl.style.left, 10) / vars.videoBoardWidth) + 1);
 	    vars.pageNumber = pageNumber;
 
 	    let leftmostElement = videoList[(pageNumber - 1) * vars.videoPerPage];
 	    let offset = (Math.ceil((leftmostElement.dataset.el / vars.videoPerPage) - 1) * -vars.videoBoardWidth);
 	    document.getElementById('video-list').style.left = `${offset}px`;
 
-	    Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
+	    renderPages();
 
-	    /*for (let i = vars.pageNumber - 3 > 0 ? vars.pageNumber - 3 : 1; i <= vars.pageNumber + 3; i++) {
-	     console.log(i);
-	     }*/
-
-	    pagesList.onclick = function (e) {
+	    vars.pagesList.onclick = function (e) {
 	        if (e.target.nodeName == 'LI') {
 	            changePage(e.target);
 	        }
@@ -308,40 +326,23 @@
 	}
 
 	function changePage(prevPage) {
-	    let pagesList = document.getElementById('pages-list');
-	    let videoUl = document.getElementById('video-list');
 	    let prevPageNumber = prevPage.dataset.page - 1;
-
 	    let leftOffset = -(prevPageNumber) * vars.videoBoardWidth;
-
 	    let pageNumber = -(leftOffset / vars.videoBoardWidth) + 1;
 	    vars.pageNumber = pageNumber;
-	    // console.log(pageNumber);
 
-	    videoUl.style.left = `${leftOffset}px`;
+	    vars.videoUl.style.left = `${leftOffset}px`;
 
-	    Array.from(pagesList.childNodes).forEach(item => {
-	        item.style.color = 'black';
+	    Array.from(vars.pagesList.childNodes).forEach(item => {
+	        item.style.color = vars.DEFAULT_PAGE_COLOR;
 	    });
-	    Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
+	    Array.from(vars.pagesList.childNodes)[vars.pageNumber - 1].style.color = vars.ACTIVE_PAGE_COLOR;
 
-	    if (videoUl.childElementCount - pageNumber * vars.videoPerPage < vars.videoPerPage) {
-	        console.log('request');
+	    if (vars.videoUl.childElementCount - pageNumber * vars.videoPerPage < vars.videoPerPage) {
 	        request(vars.query, vars.token)
 	            .then(() => {
-	                let pagesCount = Math.round(videoUl.childElementCount / vars.videoPerPage);
-	                pagesList.innerHTML = '';
-
-
-	                for (let i = 0; i < pagesCount; i++) {
-	                    let page = document.createElement('li');
-	                    page.setAttribute('data-page', `${i + 1}`);
-	                    page.innerHTML = `${i + 1}`;
-	                    pagesList.appendChild(page);
-	                }
-	                console.log('pN = ' + vars.pageNumber);
-	                Array.from(pagesList.childNodes)[vars.pageNumber - 1].style.color = `red`;
-
+	                vars.pagesList.innerHTML = '';
+	                renderPages();
 	            })
 	    }
 	}
@@ -359,22 +360,13 @@
 	 * Created by lykovartem on 31.12.2016.
 	 */
 
-	const vars = __webpack_require__(5);
-	// const request = require('./request');
+	const vars = __webpack_require__(2);
 	const pagination = __webpack_require__(7);
 
 
 	function swipeHandler() {
 	    document.getElementById('video-board').ontouchstart = handleStart;
 	    document.ontouchmove = handleMove;
-
-
-	    /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
-	     document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
-	     document.removeEventListener('touchmove', handleMove)
-	     document.addEventListener('touchmove', handleMove, false)*/
-
-
 	    document.getElementById('video-board').onmousedown = handleStart;
 	    document.onmousemove = handleMove;
 
@@ -409,11 +401,9 @@
 
 	        if (Math.abs(xDiff) > Math.abs(yDiff)) {
 	            if (xDiff > 0) {
-	                // console.log('prevPage = ' + prevPage);
 	                pagination.changePage(pagesList[prevPage]);
 	            }
 	            else if (xDiff < 0 && leftOffset != 0) {
-	                // console.log('prevPage = ' + prevPage);
 	                pagination.changePage(pagesList[prevPage - 2]);
 	            }
 	        }

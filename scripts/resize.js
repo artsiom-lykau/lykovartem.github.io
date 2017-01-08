@@ -6,8 +6,8 @@ const vars = require('./vars');
 const pagination = require('./pagination');
 
 function resize(videoList) {
-    let videoPerPage = Math.floor(window.outerWidth / 330) || 1;
-    let videoBoardWidth = videoPerPage * 330;
+    let videoPerPage = Math.floor(window.outerWidth / vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS) || 1;
+    let videoBoardWidth = videoPerPage * vars.VIDEO_ELEMENT_WIDTH_WITH_MARGINS;
     let videoBoard = document.getElementById('video-board');
 
     videoBoard.style.width = `${videoBoardWidth}px`;

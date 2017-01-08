@@ -3,21 +3,12 @@
  */
 
 const vars = require('./vars');
-// const request = require('./request');
 const pagination = require('./pagination');
 
 
 function swipeHandler() {
     document.getElementById('video-board').ontouchstart = handleStart;
     document.ontouchmove = handleMove;
-
-
-    /* document.getElementById('video-board').removeEventListener('touchstart', handleStart)
-     document.getElementById('video-board').addEventListener('touchstart', handleStart, false)
-     document.removeEventListener('touchmove', handleMove)
-     document.addEventListener('touchmove', handleMove, false)*/
-
-
     document.getElementById('video-board').onmousedown = handleStart;
     document.onmousemove = handleMove;
 
@@ -52,11 +43,9 @@ function swipeHandler() {
 
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
             if (xDiff > 0) {
-                // console.log('prevPage = ' + prevPage);
                 pagination.changePage(pagesList[prevPage]);
             }
             else if (xDiff < 0 && leftOffset != 0) {
-                // console.log('prevPage = ' + prevPage);
                 pagination.changePage(pagesList[prevPage - 2]);
             }
         }

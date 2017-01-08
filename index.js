@@ -6,5 +6,5 @@
 const layoutRender = require('./scripts/layoutRender');
 const search = require('./scripts/search');
 
-layoutRender();
+layoutRender.renderLayout();
 search();

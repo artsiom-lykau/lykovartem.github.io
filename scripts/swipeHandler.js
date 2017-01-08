@@ -16,7 +16,7 @@ function swipeHandler() {
     let yDown;
 
     function handleStart(e) {
-        // e.preventDefault();
+        e.preventDefault();
 
         xDown = e.clientX || e.touches[0].clientX;
         yDown = e.clientY || e.touches[0].clientY;
@@ -35,11 +35,9 @@ function swipeHandler() {
         let xDiff = xDown - xUp;
         let yDiff = yDown - yUp;
 
-        let videoUl = document.getElementById('video-list');
-        let leftOffset = parseInt(videoUl.style.left, 10);
+        let leftOffset = parseInt(vars.videoUl.style.left, 10);
         let prevPage = -(leftOffset / vars.videoBoardWidth) + 1;
-        let pagesList = document.getElementById('pages-list').childNodes;
-
+        let pagesList = vars.pagesList.childNodes;
 
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
             if (xDiff > 0) {
@@ -49,7 +47,7 @@ function swipeHandler() {
                 pagination.changePage(pagesList[prevPage - 2]);
             }
         }
-        // Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
+        Array.from(pagesList)[vars.pageNumber - 1].scrollIntoView();
         xDown = 0;
     }
 }

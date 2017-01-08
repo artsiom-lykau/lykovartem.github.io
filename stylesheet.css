@@ -5,6 +5,7 @@ body {
     padding: 0;
     background-color: #F5F0F6;
     color: #393D3F;
+    min-width: 355px;
 }
 
 ul {
@@ -28,7 +29,6 @@ h4, h5, p {
 .wrapper {
     font-size: 1.1rem;
     text-align: center;
-    min-width: 357px;
 }
 
 .search-container {
@@ -44,7 +44,7 @@ h4, h5, p {
 .search-container button {
     background-color: inherit;
     border: none;
-    margin-left: 10px;
+    margin-left: 7px;
     transition: all .3s;
     cursor: pointer;
 }
@@ -55,9 +55,9 @@ h4, h5, p {
 
 .search-container input {
     padding: 5px 10px;
-    box-sizing: border-box;
     border: 0;
     background-color: inherit;
+    box-sizing: border-box;
 }
 
 .search-container input::-webkit-input-placeholder {
